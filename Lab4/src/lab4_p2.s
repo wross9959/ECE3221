@@ -149,7 +149,7 @@ outchr:
     ori r5, r5, LCD                 # write the address of LCD
     sthio r4, 0(r5)                 # write to the LCD
 
-    ori r3, r0, 5                   # the delay in ms
+    ori r3, r0, 2                   # the delay in ms
     call delayN
 
     xor r4, r4, r4                  # r4 = find the bit
