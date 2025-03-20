@@ -41,7 +41,7 @@ ISR:
 	# ------------------------------------
 
 	rdctl r3, ipending		# r3 = pending an interrupt bit
-	addi r4, r3, 0x04		# r4 = pending the 2nd lsb
+	andi r4, r3, 0x04		# r4 = pending the 2nd lsb
 	bne r4, r0, int2		# if (r4 != 0 ) then call int2
     
 	br endint
