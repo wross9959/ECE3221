@@ -2,6 +2,23 @@
 _start: br Start  # begin at the main program
 
 # ==========================================
+# ECE3221 LAB4 - Display Updates using Interrupts
+# -----------------------------------------------
+# DATE: March 20th, 2025  NAME: Will Ross #3734692
+# DATE: March 20th, 2025  NAME: Alex Cameron #3680202
+# -----------------------------------------------
+# The LCD display will be used to display ASCII
+# -----------------------------------------------
+# PORT MAP
+# 0x8870 - DECADE
+# 0x88B0 - HEXCONTROL
+# 0x88A0 - HEXDISPLAY
+# 0x8880 - REDLEDS
+# 0x88C0 - LCD
+# 0x8850 - SW
+# -----------------------------------------------
+
+# ==========================================
 # macro definitions (push/pop) at the top
 # ------------------------------------------
 
@@ -296,7 +313,7 @@ outhex:
 
     ori r4, r0, 9               # a thresehold for numbers and letters
     andi r3, r3, 0xF            # get 4 lsb
-    bgt r3, r4, hex_letter      # if ( r3 > 9) send a letter to the display
+    bge r3, r4, hex_letter      # if ( r3 > 9) send a letter to the display
 
     addi r3, r3, 0x30           # if a number add a offset for 0
     br hex_complete             # if done
@@ -389,7 +406,7 @@ out5int:
     ori r7, r0, 10                  # r7 is divider at 10
 
     out5int_loop:
-        beg r6, r0, out5int_done    # if (r6 == 0), done
+        beq r6, r0, out5int_done    # if (r6 == 0), done
 
         divu r3, r4, r5             # divide r3 = r4/r5
         mul r8, r5, r3              # put value in r8
@@ -452,7 +469,7 @@ action2:
     ori r3, r0, counter                 # set r3 to teh counter
     ori r5, r0, HEXDISPLAY              # r5 = hexdisplay reg
 
-    lwd r4, 0(r3)                       # load the r3 value to r4
+    ldw r4, 0(r3)                       # load the r3 value to r4
     addi r4, r4, 1                      # add 1 to r4
     stw r4, 0(r3)                       # send that signal back to r4
     stwio r4, (r5)                      # send it to the hex
