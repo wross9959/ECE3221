@@ -99,7 +99,7 @@ init:
 
 	# Decade timer logic
 	ori r3, r0, DECADECONTROL	# r3 = address of the decade timer
-	ori r4, r0, 1				# r4 = set lsb to enable interrupts
+	ori r4, r0, 0b00001000		# r4 = set lsb to enable interrupts
 	stwio r4, (r3)				# load r3 with r4
 
 	# button logic
@@ -137,6 +137,7 @@ outchr:
     pop r5
     pop r4
     pop ra
+    ret
 
 
 # ==========================================
@@ -288,7 +289,7 @@ out5int:
 
     out5int_loop:
         divu r5, r3, r4             # divide rr5 = r3/r4
-        mfhi r5                     # store quotient
+        remu r3, r3, r4             # store quotient
         addi r5, r5, 0x30           # convert to ascii
         call outchr                 # write to display
 
@@ -318,7 +319,7 @@ outstr:
 
     outstr_loopDone:
         pop r4
-        pop r5
+        pop r3
         pop ra
         ret 
 
