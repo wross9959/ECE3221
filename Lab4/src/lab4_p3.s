@@ -40,7 +40,7 @@ ISR:
 	# ------------------------------------
 
 	rdctl r3, ipending		# r3 = pending an interrupt bit
-	addi r4, r3, 0x04		# r4 = pending the 2nd lsb
+	andi r4, r3, 0x04		# r4 = pending the 2nd lsb
 	bne r4, r0, int2		# if (r4 != 0 ) then call int2
     
 	br endint
@@ -79,7 +79,7 @@ here:
     
     # Read switches
     movia r4, SW            # r5 = switches
-    lwdio r5, (r4)          # load the switches
+    ldwio r5, (r4)          # load the switches
     movia r6, SW            # r6 = switches
     stw r5, 0(r6)           # store the state on what the swicthes are
     or r3, r0, r5           # getting the switch vales at the memory add
@@ -157,14 +157,14 @@ init:
     # ------------------
 	# Decade timer logic
     # (1) enable interrupt generation on 100 Hz edge in the decade timer
-    moiva r22,  DECADE	        # r22 = address of the decade timer
+    movia r22,  DECADE	        # r22 = address of the decade timer
 	ori r3, r0, 0b00001000	    # r4 = set lsb to enable interrupts
 	stwio r4, 8(r22)			# load r4 with r22
     # ------------------
 
     # ienable interrupt logic
     # (2) recognize INT2 (decade timer) in the processor
-    rdctl e3, ienable
+    rdctl r3, ienable
     ori r3, r3, 0x00000004      # int2 = bit2
     wrctl ienable, r3           # int2 will now be understood by cpu
     # ------------------
@@ -199,14 +199,14 @@ outchr:
     ori r5, r5, LCD                 # write the address of LCD
     sthio r4, 0(r5)                 # write to the LCD
 
-    ori r3, r0, 5                   # the delay in ms
+    ori r3, r0, 2                   # the delay in ms
     call delayN
 
     andi r4, r4, 0x05FF             # enable low
     ori r5, r0, LCD                 # write the address of LCD
     sthio r4, 0(r5)                 # write to lcd
 
-    ori r3, r0, 5                   # delay 
+    ori r3, r0, 2                   # delay 
     call delayN
 
     xor r4, r4, r4                  # r4 = find the bit
@@ -296,7 +296,7 @@ outhex:
 
     ori r4, r0, 9               # a thresehold for numbers and letters
     andi r3, r3, 0xF            # get 4 lsb
-    bgt r3, r4, hex_letter      # if ( r3 > 9) send a letter to the display
+    bge r3, r4, hex_letter      # if ( r3 > 9) send a letter to the display
 
     addi r3, r3, 0x30           # if a number add a offset for 0
     br hex_complete             # if done
@@ -389,7 +389,7 @@ out5int:
     ori r7, r0, 10                  # r7 is divider at 10
 
     out5int_loop:
-        beg r6, r0, out5int_done    # if (r6 == 0), done
+        beq r6, r0, out5int_done    # if (r6 == 0), done
 
         divu r3, r4, r5             # divide r3 = r4/r5
         mul r8, r5, r3              # put value in r8
@@ -452,7 +452,7 @@ action2:
     ori r3, r0, counter                 # set r3 to teh counter
     ori r5, r0, HEXDISPLAY              # r5 = hexdisplay reg
 
-    lwd r4, 0(r3)                       # load the r3 value to r4
+    ldw r4, 0(r3)                       # load the r3 value to r4
     addi r4, r4, 1                      # add 1 to r4
     stw r4, 0(r3)                       # send that signal back to r4
     stwio r4, (r5)                      # send it to the hex
