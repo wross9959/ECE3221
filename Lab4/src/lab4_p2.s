@@ -40,7 +40,7 @@ ISR:
 	# ------------------------------------
 
 	rdctl r3, ipending		# r3 = pending an interrupt bit
-	addi r4, r3, 0x04		# r4 = pending the 2nd lsb
+	andi r4, r3, 0x04		# r4 = pending the 2nd lsb
 	bne r4, r0, int2		# if (r4 != 0 ) then call int2
     
 	br endint
@@ -106,14 +106,14 @@ init:
     # ------------------
 	# Decade timer logic
     # (1) enable interrupt generation on 100 Hz edge in the decade timer
-    moiva r22,  DECADE	        # r22 = address of the decade timer
+    movia r22,  DECADE	        # r22 = address of the decade timer
 	ori r3, r0, 0b00001000	    # r4 = set lsb to enable interrupts
 	stwio r4, 8(r22)			# load r4 with r22
     # ------------------
 
     # ienable interrupt logic
     # (2) recognize INT2 (decade timer) in the processor
-    rdctl e3, ienable
+    rdctl r3, ienable
     ori r3, r3, 0x00000004      # int2 = bit2
     wrctl ienable, r3           # int2 will now be understood by cpu
     # ------------------
@@ -348,7 +348,7 @@ outstr:
     outstr_loopDone:
         pop r5
         pop r4
-        pop r5
+        pop r3
         pop ra
         ret 
 
@@ -363,7 +363,7 @@ action2:
     ori r3, r0, counter                 # set r3 to teh counter
     ori r5, r0, HEXDISPLAY              # r5 = hexdisplay reg
 
-    lwd r4, 0(r3)                       # load the r3 value to r4
+    ldw r4, 0(r3)                       # load the r3 value to r4
     addi r4, r4, 1                      # add 1 to r4
     stw r4, 0(r3)                       # send that signal back to r4
     stwio r4, (r5)                      # send it to the hex
