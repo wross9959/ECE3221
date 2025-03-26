@@ -69,6 +69,8 @@ Start:
 	ori r8,r0,SWITCHES	#loading the address of switches
 	call clrscr
 	call outstr
+ 
+# Comment out when showing the strings printing out 
 	call clrscr
 top:
 	#ldwio r3,(r8)		#load values of switches to r3
@@ -86,7 +88,7 @@ top:
 	or r4,r0,r3
 
 	br top
-
+# --- to here comment out 
 	
 # ==========================================
 
@@ -482,5 +484,6 @@ counter: .word 0
 # stored strings
 
 welcome: .asciz "Welcome to Lab 4"
+# welcome .asciz "AAAA"
 hex: .ascii "0123456789ABCDEF"
 #------------------------------------------
