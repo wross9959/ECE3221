@@ -17,7 +17,7 @@ addi sp,sp,4
 .equ N, 		    400
 .equ lcd,		    0x000088C0 	#LCD Control
 .equ DECADE,		0x00008870  #Decade Timer
-.equ DECADECONTROL, 0x00088E0   Decade Control
+.equ DECADECONTROL, 0x000088E0   # Decade Control
 .equ REDLEDS,		0x00008880 	#Red leds
 .equ HEXCONTROL,	0x000088B0 	#display hex digits
 .equ SWITCHES, 		0x00008850 	#switches
@@ -455,7 +455,6 @@ action2:
 	push r5
 	push r6
 
-    @ TODO: r5 is not used
 	ori r6,r0,HEX		#loads adress of hex display
 	movia r3,counter
 	ldwio r4,(r3)		#loads value of counter
